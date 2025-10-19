@@ -1,0 +1,100 @@
+CREATE TABLE Pieces (
+    Code INT PRIMARY KEY NOT NULL,
+    Name VARCHAR (256)NOT NULL
+ );
+
+
+CREATE TABLE Providers (
+ Code VARCHAR(40) 
+ PRIMARY KEY NOT NULL,  
+ Name VARCHAR(256) NOT NULL 
+ );
+
+
+CREATE TABLE Provides (
+ Piece INTEGER, 
+ FOREIGN KEY (Piece) REFERENCES Pieces(Code),
+ Provider VARCHAR(40), 
+ FOREIGN KEY (Provider) REFERENCES Providers(Code),  
+ Price INTEGER NOT NULL,
+ PRIMARY KEY(Piece, Provider) 
+ );
+
+INSERT INTO Providers(Code, Name) VALUES('HAL','Clarke Enterprises');
+INSERT INTO Providers(Code, Name) VALUES('RBT','Susan Calvin Corp.');
+INSERT INTO Providers(Code, Name) VALUES('TNBC','Skellington Supplies');
+INSERT INTO Pieces(Code, Name) VALUES(1,'Sprocket');
+INSERT INTO Pieces(Code, Name) VALUES(2,'Screw');
+INSERT INTO Pieces(Code, Name) VALUES(3,'Nut');
+INSERT INTO Pieces(Code, Name) VALUES(4,'Bolt');
+INSERT INTO Provides(Piece, Provider, Price) VALUES(1,'HAL',10);
+INSERT INTO Provides(Piece, Provider, Price) VALUES(1,'RBT',15);
+INSERT INTO Provides(Piece, Provider, Price) VALUES(2,'HAL',20);
+INSERT INTO Provides(Piece, Provider, Price) VALUES(2,'RBT',15);
+INSERT INTO Provides(Piece, Provider, Price) VALUES(2,'TNBC',14);
+INSERT INTO Provides(Piece, Provider, Price) VALUES(3,'RBT',50);
+INSERT INTO Provides(Piece, Provider, Price) VALUES(3,'TNBC',45);
+INSERT INTO Provides(Piece, Provider, Price) VALUES(4,'HAL',5);
+INSERT INTO Provides(Piece, Provider, Price) VALUES(4,'RBT',7);
+
+select * from Pieces;
+select * from Providers;
+select * from Provides;
+
+
+
+
+1. select all the tables
+select * from Pieces;
+select * from Providers;
+select * from Provides;
+
+
+2. Select the name of all the pieces. 
+select name from Pieces;
+
+3.Select all the providers' data. 
+select * from Providers;
+
+4.Obtain the average price of each piece (show only the piece code and the average price).
+select * from Provides group by piece 
+
+select piece, avg(price) from Provides group by piece;
+
+
+5.Obtain the names of all providers who supply piece 1 using IN operator
+select Name 
+from Providers
+where Code in (
+select  Provider from provides where Piece = 1
+);
+
+6. Select the name of pieces provided by provider with code "HAL" using IN operator.
+select Name from Pieces
+where Code in (
+select Piece from Provides where Provider = 'HAL'
+);
+
+7.Add an entry to the database to indicate that "Skellington Supplies" (code "TNBC") will provide sprockets (code "1") for 7 cents each.
+Insert Into Providers (piece, provider, price) values (1, TNBC, .07)
+
+8.Increase all prices by one cent.
+UPDATE Provides SET Price = Price + 1;
+
+9.delete the database to reflect that "Susan Calvin Corp." (code "RBT") will not supply bolts (code 4).
+delete from provides where provider = 'rbt' and piece = 4;
+
+10 Update the database to reflect that "Susan Calvin Corp." (code "RBT") will not supply any pieces 
+-- (the provider should still remain in the database).
+
+delete from provides where provider = 'rbt';
+
+
+
+Insert Into Boxes values ('H6RT', 'Papers', '175', '3')
+
+
+
+
+
+

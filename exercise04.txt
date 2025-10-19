@@ -1,0 +1,77 @@
+CREATE TABLE Movies (
+  Code INTEGER PRIMARY KEY,
+  Title VARCHAR(255) NOT NULL,
+  Rating VARCHAR(255) 
+);
+
+CREATE TABLE MovieTheaters (
+  Code INTEGER PRIMARY KEY,
+  Name VARCHAR(255) NOT NULL,
+  Movie INTEGER,  
+    FOREIGN KEY (Movie) REFERENCES Movies(Code)
+)
+INSERT INTO Movies(Code,Title,Rating) VALUES(1,'Citizen Kane','PG');
+ INSERT INTO Movies(Code,Title,Rating) VALUES(2,'Singin'' in the Rain','G');
+ INSERT INTO Movies(Code,Title,Rating) VALUES(3,'The Wizard of Oz','G');
+ INSERT INTO Movies(Code,Title,Rating) VALUES(4,'The Quiet Man',NULL);
+ INSERT INTO Movies(Code,Title,Rating) VALUES(5,'North by Northwest',NULL);
+ INSERT INTO Movies(Code,Title,Rating) VALUES(6,'The Last Tango in Paris','NC-17');
+ INSERT INTO Movies(Code,Title,Rating) VALUES(7,'Some Like it Hot','PG-13');
+ INSERT INTO Movies(Code,Title,Rating) VALUES(8,'A Night at the Opera',NULL);
+INSERT INTO MovieTheaters(Code,Name,Movie) VALUES(1,'Odeon',5);
+ INSERT INTO MovieTheaters(Code,Name,Movie) VALUES(2,'Imperial',1);
+ INSERT INTO MovieTheaters(Code,Name,Movie) VALUES(3,'Majestic',NULL);
+ INSERT INTO MovieTheaters(Code,Name,Movie) VALUES(4,'Royale',6);
+ INSERT INTO MovieTheaters(Code,Name,Movie) VALUES(5,'Paraiso',3);
+ INSERT INTO MovieTheaters(Code,Name,Movie) VALUES(6,'Nickelodeon',NULL);
+
+
+
+1.Select the title of all movies
+select title from Movies;
+
+2.Show all the distinct ratings in the database
+select distinct Rating from Movies where Rating is not null;
+
+3.Show all unrated movies
+select Title from Movies where Rating is null;
+
+4.Select all movie theaters that are not currently showing a movie.
+select Name from MovieTheaters where Movie is null;
+
+5. Add the unrated movie "One, Two, Three".
+INSERT INTO Movies VALUES(9,'One, Two, Three',NULL);
+
+6. Set the rating of all unrated movies to "G".
+update Movies set rating='G' where rating is null;
+* UPDATE IS FOR TABLE DATA, ALTER TO CHANGE THE TABLE ITSELF (column name etc)
+
+JOIN CONDITION(MovieTheaters.movie = Movies.code)
+1.Select all data from all movie theaters 
+and, additionally,
+   the data from the movie that is being shown in the theater (if one is being shown)
+
+select * from MovieTheaters left join Movies on MovieTheaters.movie = Movies.code;
+>> result is no items to display, but this is the correct query ...
+   may be something with oracle live?
+
+select * FROM MovieTheaters RIGHT JOIN Movies
+   ON MovieTheaters.Movie = Movies.Code;
+
+>>> reference:
+select a.*, b.name from products a join Manufacturers b on(a.manufacturer = b.code);
+select a.*, b.name from products a, Manufacturers b where a.manufacturer = b.code;
+
+
+2.Select all data from all movies and, if that movie is being shown in a theater, show the data from the theater.
+select * from movies outer join movietheaters on (movies.code = movietheaters.code);
+>> result is no items to display, but this is the correct query ...
+   may be something with oracle live?
+
+
+>> both 1 & 2 join questions have 'no items to display' in oracle live
+   but vikas gets a result in desktop oracle sql 
+
+
+
+

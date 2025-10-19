@@ -1,0 +1,79 @@
+> commands run in the Oracle sql IDE online:
+
+oracle: live sql
+https://livesql.oracle.com/next/worksheet?tutorial=sql-macros-creating-parameterised-views-mgEdl9
+
+---------------------------------------------------------------------------
+> select statements
+
+create table student (sid int, sname varchar(20), total_marks int);
+
+insert into student values (1, 'ABC', 400);
+insert into student (sid, sname, total_marks) values (2, 'PQR', 500);
+
+select sid,sname from student;
+select * from student;
+
+select * from student where sid=1;
+select * from student where sname='ABC';
+
+insert into student values(3, 'ABC', 666)
+select * from student;
+select distinct(sname) from student where sname='ABC';
+
+select * from student where sname = 'ABC' and sid = 1;
+
+select * from student where sid=1 or sname='ABC';
+
+select * from student where sname='ABC' and sid=4;
+
+select * from student where sname='ABC' or sid=4;
+
+select * from student where NOT sname='ABC';
+
+delete from student where sid=3;
+select * from student;
+
+select * from student order by total_marks desc;
+
+select * from student order by total_marks asc;
+
+update student set total_marks='700' where sname='PQR';
+
+insert into student(sid,sname) values(3, 'XYZ');
+select * from student order by sid desc;
+
+select * from student where total_marks is null;
+
+select * from student where total_marks is not null;
+
+select * from student where total_marks between 300 and 500;
+
+select * from student where sname between 'A' and 'M';
+
+select MIN(total_marks)from student;
+
+select MAX(total_marks)from student;
+
+select COUNT(total_marks)from student;
+
+select AVG(total_marks)from student;
+
+select SUM(total_marks)from student;
+
+select name, price as calculation from products;
+> renames "price" column temporarily (as an alias) to 'calculation'
+
+
+CREATE VIEW [Products Above Average Price] AS
+SELECT ProductName, Price
+FROM Products
+WHERE Price > (SELECT AVG(Price) FROM Products);
+
+Query the view:
+SELECT * FROM [Products Above Average Price];
+
+
+
+ 
+

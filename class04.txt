@@ -1,0 +1,81 @@
+select * from employees
+select concat (name,lastname) as fullname from employees;
+
+
+-- double pipe as escape character
+select 'HELLO' || ' ' || 'WORLD' as greetings;
+
+select * from employees;
+-- find the duplicate records from the table
+select count(department), department from employees group by department
+having count(department) > 1;
+-- find the unique records
+select count(department), department from employees group by department
+having count(department) = 1;
+
+select * from employees;
+
+-- CASE, like if/else
+select ssn,name,lastname,department,
+case 
+when ssn = '123234877' then 'this is michael rogers'
+when ssn = '152934485' then 'this is anand manikutty'
+else 'no result'
+end as result from employees;
+
+select * from boxes;
+create index indx_boxes on boxes(warehouse); 
+
+++ get value for the query based on user input
+select * from boxes where warehouse = &warehouse;
+
+-- not null, unique & primary key
+create table demo (id int, name varchar(20), age int);
+insert into demo (id, name, age) values (1, 'ABC', 34);
+insert into demo (id, name, age) values (NULL, 'PQR', 55);
+select * from demo;
+
+drop table demo;
+
+create table demo (id int not null, name varchar(20), age int);
+insert into demo (id, name, age) values (1, 'ABC', 34);
+insert into demo (id, name, age) values (NULL, 'PQR', 55);
+select * from demo;
+
+create table demo (id int unique, name varchar(20), age int);
+insert into demo (id, name, age) values (1, 'ABC', 34);
+insert into demo (id, name, age) values (1, 'PQR', 55);
+select * from demo;
+
+create table demo (id int primary key, name varchar(20), age int);
+insert into demo (id, name, age) values (1, 'ABC', 34);
+insert into demo (id, name, age) values (1, 'PQR', 55);
+select * from demo;
+
+
+create table demo1 (id int primary key, name varchar(20));
+insert into demo1 (id, name) values (1, 'ABC');
+insert into demo1 (id, name) values (2, 'PQR');
+select * from demo1;
+
+create table demo2 (oid int, oname varchar(20), id int, foreign key (id) references demo1 (id));
+insert into demo2 values (101, 'Apple', 1);
+insert into demo2 values (102, 'Pear', 2);
+select * from demo2;
+
+
+-- CHECK (limit input)
+drop table demo;
+create table demo (id int primary key, name varchar(20), age int, check (age > 18));
+insert into demo (id, name, age) values (1, 'ABC', 34);
+insert into demo (id, name, age) values (1, 'PQR', 18);
+select * from demo;
+
+-- DEFAULT (sets a column default -- have to pass values in 1st paren clause
+drop table demo;
+create table demo (id int primary key, name varchar(20), age int default 20);
+insert into demo  (id, name) values (1, 'ABC', 34);
+insert into demo  (id, name)values (2, 'PQR');
+select * from demo;
+
+drop table demo;

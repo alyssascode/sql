@@ -1,0 +1,142 @@
+sub queries:
+perform a query on a sub-set from another table or group of results:
+
+select rows where the value is higher than the average value:
+select Contents from boxes where value > (select AVG (value) from boxes)
+ALSO:
+select code, contents from boxes where value > (select AVG (value) from boxes)
+select distinct Contents from boxes where value > (select AVG (value) from boxes)
+
+
+IN, ANY, ALL
+select column_name from table_name
+  where column_name operator ANY 
+ (select column_name from table_name where condition)
+
+select warehouse, contents from boxes where warehouse = ALL (select code from warehouses 
+where code = '3')
+
+> ANY is for numbers, ALL is for strings
+
+CTE
+CTE: common table expression is temporary table for storing results
+      to improve readability
+
+with CTE as
+(select * from boxes where value = 170)
+select * from CTE
+
+
+
+CREATE TABLE Cars
+(
+id INT,
+name VARCHAR(50) NOT NULL,
+company VARCHAR(50) NOT NULL,
+power INT NOT NULL
+)
+INSERT INTO Cars
+VALUES
+(1, 'Corrolla', 'Toyota', 1800);
+INSERT INTO Cars
+VALUES
+(2, 'City', 'Honda', 1500);
+INSERT INTO Cars
+VALUES
+(3, 'C200', 'Mercedez', 2000);
+INSERT INTO Cars
+VALUES
+(4, 'Vitz', 'Toyota', 1300);
+INSERT INTO Cars
+VALUES
+(5, 'Baleno', 'Suzuki', 1500);
+INSERT INTO Cars
+VALUES
+(6, 'C500', 'Mercedez', 5000);
+INSERT INTO Cars
+VALUES
+(7, '800', 'BMW', 8000);
+INSERT INTO Cars
+VALUES
+(8, 'Mustang', 'Ford', 5000);
+INSERT INTO Cars
+VALUES
+(9, '208', 'Peugeot', 5400);
+INSERT INTO Cars
+VALUES
+(10, 'Prius', 'Toyota', 3200);
+INSERT INTO Cars
+VALUES
+(11, 'Atlas', 'Volkswagen', 5000);
+INSERT INTO Cars
+VALUES
+(12, '110', 'Bugatti', 8000);
+INSERT INTO Cars
+VALUES
+(13, 'Landcruiser', 'Toyota', 3000);
+INSERT INTO Cars
+VALUES
+(14, 'Civic', 'Honda', 1800);
+INSERT INTO Cars
+VALUES
+(15, 'Accord', 'Honda', 2000);
+
+
+
+select name, company, power,
+ROW_NUMBER() OVER (order by power desc) as data from cars;
+> assigns a row number to the data w/ 'data' column as row number,
+  ordered by horse power descending
+> use this with the create table function to permanently map
+  this row number to the row's data
+
+
+select name, company, power,
+RANK() OVER (order by power desc) as data from cars;
+
+rank - is the same but handles duplicates:
+  - gives the same row number in the data column to
+    items that have the same power rating
+
+> 'over' is 'perform this operation over/on the data using the following condition'
+
+
+select name, company, power,
+RANK() OVER (partition by company order by power desc) as data from cars;
+> does the group by & re-ranks - ranking within the partition/group 
+  "1, 2, 3 within Honda, Mercedes, etc)
+
+select * from
+(select name,company,power
+rank()over (partition by company order by power desc) as data from cars)
+
+select name, company, power,
+RANK() OVER (partition by company order by power desc) as data from cars;
+
+-----
+(if partition is not included, the results skip over duplicates
+ in a kind of useless way,
+ so its better to re-state it as dense_rankL
+
+instead of this:
+select name, company, power,
+RANK() OVER (order by power desc) as data from cars;
+
+
+use this:
+select name, company, power,
+DENSE_RANK() OVER (order by power desc) as data from cars;
+
+-------
+
+
+
+
+
+
+
+
+
+
+
+

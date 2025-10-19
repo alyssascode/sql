@@ -1,0 +1,71 @@
+select * from products;
+alter table products add (country varchar(20));
+alter table products drop column country;
+alter table products rename column code to product_code;
+
+-- remove duplicates
+select * from student;
+select count(*), sid,sname from student group by sid,sname;
+select count(sname) as name_count, sname from student group by sname;
+
+-- clear data (not table)
+truncate table products;
+select * from products;
+
+-- delete table
+drop table student;
+select * from student;
+
+-- clear data and then delete table
+truncate table manufacturers;
+drop table products;
+drop table manufacturers;
+
+-- update data (with commit and rollback)
+create table employees (id int, name varchar (20), sal int);
+insert into employees values (1, 'ABC', 4000);
+insert into employees values (2, 'ABC', 3000);
+insert into employees values (3, 'ABC', 6000);
+
+update employees set sal=95500000 where id=1;
+commit; --oracle sql only 
+select * from employees;
+rollback;  --oracle sql only
+
+select * from employees;
+select sal from employees where sal IN (95500000, 6000);
+select id from employees where id IN (2, 3);
+
+
+-- inner join
+create table customers(cid int,name varchar(20));
+
+insert into customers values(1,'ABC');
+insert into customers values(2,'PQR');
+insert into customers values(3,'XYZ');
+
+create table orders(oid int,oname varchar(20),cid int,amount int);
+
+insert into orders values(101,'APPLE',1,200);
+insert into orders values(102,'Orange',2,300);
+insert into orders values(103,'Pizza',5,500);
+
+select customers.cid,customers.name,orders.oid,orders.amount from customers inner join orders on customers.cid = orders.cid;
+
+-- abbreviating table name to 'c' and 'o' for convenience
+select c.cid,c.name,o.oid,o.amount from customers c inner join orders o
+on c.cid = o.cid;
+
+-- left outer join (all the records from left table w null for non-matching rows in right table)
+select c.cid,c.name,o.oid,o.amount from customers c left outer join orders o
+on c.cid = o.cid;
+
+-- right outer join (all the records from right table w null for non-matching rows in left table)
+select c.cid,c.name,o.oid,o.amount from customers c right outer join orders o
+on c.cid = o.cid;
+
+-- full outer join (all the records from both tables w null for non-matching rows)
+select c.cid,c.name,o.oid,o.amount from customers c full outer join orders o
+on c.cid = o.cid;
+
+drop table employees;
